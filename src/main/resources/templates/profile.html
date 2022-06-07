@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Store</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img th:src="@{/assets/logo.svg}" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            Pet Store
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">О нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Каталог</a>
+                </li>
+            </ul>
+            <a href="/login" sec:authorize="isAnonymous()" class="btn btn-primary">Войти</a>
+            <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                <input type="submit" value="Выйти" class="btn btn-primary" role="button">
+            </form>
+        </div>
+    </div>
+</nav>
+<section class="section section_padding-top">
+    <div class="section__content-container content-container content-container_profile">
+        <div class="content-container__profile-container profile-container">
+            <div
+                    class="profile-container__user-image-container user-image-container"
+            >
+                <img class="user-image-container__image" th:src="@{/assets/dog2.jpg}" alt="userphoto"/>
+            </div>
+            <div class="profile-container__user-info-container user-info-container">
+                <div class="user-info-container__info-row info-row">
+                    <span class="info-row__title">ID:</span>
+                    <span class="info-row__data" th:text="${id}">id</span>
+                </div>
+                <div class="user-info-container__info-row info-row">
+                    <span class="info-row__title">Почта:</span>
+                    <span class="info-row__data" th:text="${email}">email</span>
+                </div>
+                <div class="user-info-container__info-row info-row">
+                    <span class="info-row__title">Дата регистрации:</span>
+                    <span class="info-row__data" th:text="${createdAt}">createdAt</span>
+                </div>
+                <div class="user-info-container__info-row info-row">
+                    <span class="info-row__title">Роль:</span>
+                    <span class="info-row__data" th:text="${role}">role</span>
+                </div>
+            </div>
+        </div>
+        <div class="content-container__cards-container cards-container">
+            <article class="card card_padding" th:each="product : ${products}">
+                <div class="card__image-container image-container">
+                    <img th:src="${product.photoUrl}" alt="flower-photo" class="image-container__image"/>
+                </div>
+                <div class="card__info-container info-container">
+                    <div class="info-container__card-text-container card-text-container">
+                        <h3 class="card-text-container__title" th:text="${product.name}">This is card</h3>
+                        <h4 class="card-text-container__title" th:text="${product.category.name}">This is card</h4>
+                        <p class="card-text-container__description" th:text="${product.description}">Lorem ipsum dolor sit amet.</p>
+                    </div>
+                    <div class="info-container__card-price-container">
+                        <span class="card-price" th:text="${product.price}">$999</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+<section sec:authorize="hasAuthority('ROLE_ADMIN')" class="section section_small">
+    <div class="section__form-container form-container">
+        <h2 class="form-container__form-title">Добавить категорию</h2>
+        <form th:action="@{/category/create}" method="post" class="form">
+            <input
+                    type="text"
+                    placeholder="Название"
+                    name="name"
+                    id="name"
+                    class="form__input input"
+            />
+            <input
+                    type="submit"
+                    value="Добавить"
+                    class="form__input input submit-button"
+            />
+        </form>
+    </div>
+</section>
+<section sec:authorize="hasAuthority('ROLE_ADMIN')" class="section section_small">
+    <div class="section__form-container form-container">
+        <h2 class="form-container__form-title">Добавить продукт</h2>
+        <form th:action="@{/product/create}" method="post" class="form">
+            <input
+                    type="text"
+                    placeholder="Название"
+                    name="name"
+                    id="name"
+                    class="form__input input"
+            />
+            <input
+                    type="text"
+                    placeholder="Описание"
+                    name="description"
+                    id="description"
+                    class="form__input input"
+            />
+            <input
+                    type="number"
+                    placeholder="Цена"
+                    name="price"
+                    id="price"
+                    class="form__input input"
+            />
+            <input
+                    type="url"
+                    placeholder="Ссылка на фото"
+                    name="photoUrl"
+                    id="url"
+                    class="form__input input"
+            />
+            <input
+                    type="text"
+                    placeholder="Категория"
+                    name="category"
+                    id="category"
+                    class="form__input input"
+            />
+            <input
+                    type="submit"
+                    value="Добавить"
+                    class="form__input input submit-button"
+            />
+        </form>
+    </div>
+</section>
+
+<div class="container">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <p class="col-md-4 mb-0 text-muted">© 2022 Pet Store</p>
+
+        <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+            <img th:src="@{/assets/logo.svg}" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            Pet Store
+        </a>
+
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="/" class="nav-link px-2 text-muted">Главная</a></li>
+            <li class="nav-item"><a href="/" class="nav-link px-2 text-muted">О Нас</a></li>
+            <li class="nav-item"><a href="/" class="nav-link px-2 text-muted">Каталог</a></li>
+        </ul>
+    </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/assets/logo.svg}" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            Pet Store
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">О нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#catalog">Каталог</a>
+                </li>
+            </ul>
+            <a href="/login" sec:authorize="isAnonymous()" class="btn btn-primary">Войти</a>
+            <a href="/profile" style="margin: 10px" sec:authorize="isAuthenticated()" class="btn btn-primary">Профиль</a>
+            <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                <input type="submit" value="Выйти" class="btn btn-primary" role="button">
+            </form>
+        </div>
+    </div>
+</nav>
+<div id="main" class="container-fluid">
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img th:src="@{/assets/dog1.png}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Text1</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis erat non odio scelerisque tempor.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img th:src="@{/assets/dog1.png}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Text2</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis erat non odio scelerisque tempor.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img th:src="@{/assets/dog1.png}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Text3</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis erat non odio scelerisque tempor.</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+<div id="about" class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+            <img th:src="@{/assets/cat2.png}" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+        </div>
+        <div class="col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3">Мы — это лучший и надежный магазин зоотоваров</h1>
+            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis erat non odio scelerisque tempor. Vivamus dignissim pellentesque elit, vitae fringilla orci consectetur vel. Proin sed nisi metus. Cras eu molestie magna, vel malesuada quam. Cras fringilla vulputate ultrices. Proin tristique auctor eros, ut varius massa congue in. In auctor sollicitudin nunc eu accumsan. Donec vehicula efficitur purus in vulputate.</p>
+        </div>
+    </div>
+</div>
+<div id="catalog" class="container-fluid">
+    <div class="d-flex justify-content-center mx-auto">
+        <h2>Каталог продуктов</h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-4" th:each="products : ${products}">
+                <div class="card">
+                    <img class="card-img" th:src="${products.photoUrl}" alt="flower-photo">
+                    <div class="card-body">
+                        <h4 class="card-title" th:text="${products.name}">Product Title</h4>
+                        <p class="card-text" th:text="${products.description}">Long Product Description</p>
+                        <div class="buy d-flex justify-content-between align-items-center">
+                            <div class="price text-success">
+                                <h5 class="mt-4" th:text="${products.price}">Product Price</h5>
+                            </div>
+                            <a th:href="@{'/product/' + ${products.id}}" class="btn btn-primary mt-3">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <p class="col-md-4 mb-0 text-muted">© 2022 Pet Store</p>
+
+        <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+            <img th:src="@{/assets/logo.svg}" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            Pet Store
+        </a>
+
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="#main" class="nav-link px-2 text-muted">Главная</a></li>
+            <li class="nav-item"><a href="#about" class="nav-link px-2 text-muted">О Нас</a></li>
+            <li class="nav-item"><a href="#catalog" class="nav-link px-2 text-muted">Каталог</a></li>
+        </ul>
+    </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
